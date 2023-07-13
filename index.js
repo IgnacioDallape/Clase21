@@ -6,9 +6,9 @@ import { initializatePassport } from './config/passport.js'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(passport.initialize())
-app.use(cookieParser())
 initializatePassport()
 app.use('/auth', authRouter)
 

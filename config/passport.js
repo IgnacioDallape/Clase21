@@ -30,8 +30,8 @@ const initializatePassport = () => {
 //usamos el objeto req ya que con eso vamos a buscar la cookie, esto es lo q va a usar el extractor para ver si existe la cookie, si existe, se la pasamos desde aca
 const cookieExtractor = (req) => {
     let token = null
-    if( req && req.cookie){
-        token = req.cookie['cookieToken']   //aca puedo tener muchas cookies, asi que con llaves puedo acceder a una propiedad con su nombre, aca pongo el nombre de la cookie creada en auth login, especificamente en res.cookie('cookieToken', ...)
+    if( req && req.headers.cookie){
+        token = req.cookies['cookieToken']   //aca puedo tener muchas cookies, asi que con llaves puedo acceder a una propiedad con su nombre, aca pongo el nombre de la cookie creada en auth login, especificamente en res.cookie('cookieToken', ...)
     }
     console.log(token)
     return token 
