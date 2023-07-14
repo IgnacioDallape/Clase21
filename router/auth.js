@@ -3,12 +3,14 @@ import jwt from 'jsonwebtoken'
 const { Router } = express
 const router = new Router()
 import passport from 'passport'
+import { passportCall, authorization } from '../config/passport.js'
 
 router.post('/login', (req,res) => {
     if(req.body.username == 'nacho@mail.com' && req.body.password == 1234){
         let token = jwt.sign({
             email : req.body.username,
-            password: req.body.password
+            password: req.body.password,
+            role: 'user'
         },
         'secreto123',
         {expiresIn: '24h'}
@@ -31,9 +33,16 @@ router.post('/login', (req,res) => {
     //ahora en mas, el login lo vamos a hacer con jwt, con passport vamos a crear un middleware para pasarle a las rutas privadas el token para que el user acceda
 })
 
-//creamos una ruta en la cual solo tendran acceso los que tengan ese token, ya que con  passport.authenticate('jwt') pasa por este middleware que los lleva a la estrategia jwt, que justamente es el argumento que debo pasar, el nombre de la estrategia que quiero que se use, ya que podemos tener muchas estrategias, y le decimos tambien q no nos cree una session
-router.get('/home', passport.authenticate('jwt',{session:false}) , (req,res) => {
+//creamos una ruta en la cual solo tendran acceso los que tengan ese token, ya que con  passport.authenticate('jwt') pasa por este middleware que los lleva a la estrategia jwt, que justamente es el argumento que debo pasar, el nombre de la estrategia que quiero que se use, ya que podemos tener muchas estrategias, y le decimos tambien q no nos cree una session, podriamos guardar sessions con mongo-storage, pero en esta oportunidad no lo hacemos
+// router.get('/home', passport.authenticate('jwt',{session:false}) , (req,res) => {
+//     res.send(req.user) //si es exitoso el logueo, uso req.user, que gracias a el done y payload, podemos acceder, y buscamos el user
+// })
+
+
+
+//comente el anterior pq este middleware que hicimos es mejor, se ve mas bonito y te da mejor el error que tenes
+router.get('/home',passportCall('jwt'), authorization('user') , (req,res) => {
+    //usamos otro middleaware, el de authorization, y le pasamos el role que le permitimos ingresar, user, si es admin el usuario que quiere ingresar, no podrá hacerlo
     res.send(req.user) //si es exitoso el logueo, uso req.user, que gracias a el done y payload, podemos acceder, y buscamos el user
 })
-
 export {router}
