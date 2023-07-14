@@ -5,7 +5,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 const initializatePassport = () => {
     passport.use('jwt', new JwtStrategy({
         //primer argumento
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),  //aca se deserializa
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),  //aca se deserializa 
         //aca le digo que el jwt lo extraigo desde una cookie, y ejecuto la funcion que verifica eso, y su metodo que me aclara que es desde los extractors, y recibe un array, que recibe el nombre de la funcion encargada de extraer a la cookie
         secretOrKey: 'secreto123'
         //y este es el secreto, que pusimos cuando se creo el token en el metodo post en routes auth
